@@ -21,7 +21,7 @@ public class EditorBottomPanel extends JPanel {
 		add(delayLabel, BorderLayout.WEST);
 		
 		JLabel currentDelayLabel = new JLabel(Runner.currentDelay > 1000 ? Runner.currentDelay/1000.0 + "s" : Runner.currentDelay + "ms");
-		currentDelayLabel.setPreferredSize(new Dimension(50,40));
+		currentDelayLabel.setPreferredSize(new Dimension(50,0));
 		add(currentDelayLabel, BorderLayout.EAST);
 		
 		JSlider delaySlider = new JSlider();

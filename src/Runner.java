@@ -60,6 +60,8 @@ public class Runner extends JFrame{
 				bottomPanel = new EditorBottomPanel();
 				getContentPane().add(bottomPanel, BorderLayout.SOUTH);
 				
+				setResizable(false);
+				
 				revalidate();
 				repaint();
 			}
@@ -72,6 +74,12 @@ public class Runner extends JFrame{
 		bottomPanel = new MenuBottomPanel();
 	
 		getContentPane().add(bottomPanel, BorderLayout.SOUTH);
+		
+		
+		JPanel sidePanel = new CellSelector();
+		
+		getContentPane().add(sidePanel, BorderLayout.EAST);
+		
 		
 		
 		this.setVisible(true);
