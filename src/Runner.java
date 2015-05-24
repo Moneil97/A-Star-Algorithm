@@ -1,8 +1,13 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -14,10 +19,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 
-@SuppressWarnings("serial")
+@SuppressWarnings({ "serial", "unused" })
 public class Runner extends JFrame{
 
-	Screen currentScreen = Screen.MENU;
+	//Screen currentScreen = Screen.MENU;
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	static int currentGridSize = 30;
 	static Cell[][] cells;
@@ -26,7 +31,6 @@ public class Runner extends JFrame{
 	
 	
 	public Runner() {
-		
 		
 		this.setSize(screenSize.width*3/4, screenSize.height*3/4);
 		this.setResizable(true);
@@ -46,9 +50,13 @@ public class Runner extends JFrame{
 				
 				for (int r=0; r < rows; r++)
 					for (int c=0; c < cols; c++)
-						cells[r][c] = new Cell(c*50,r*50,50);
+						cells[r][c] = new Cell(c*currentGridSize,r*currentGridSize,currentGridSize);
 				
-				say("go");
+				getContentPane().remove(centerPanel);
+				centerPanel = new EditorCenterPanel();
+				getContentPane().add(centerPanel, BorderLayout.CENTER);
+				revalidate();
+				repaint();
 			}
 		};
 		
