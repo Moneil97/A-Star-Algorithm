@@ -26,9 +26,8 @@ public class Runner extends JFrame{
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	static int currentGridSize = 30;
 	static Cell[][] cells;
-	JPanel centerPanel;
+	JPanel centerPanel, bottomPanel;
 	static SimpleAbstractButton readyButton;
-	
 	
 	public Runner() {
 		
@@ -64,37 +63,9 @@ public class Runner extends JFrame{
 		
 		getContentPane().add(centerPanel, BorderLayout.CENTER);
 		
-		JPanel bottomPanel = new JPanel();
-		bottomPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		bottomPanel.setLayout(new BorderLayout());
+		bottomPanel = new MenuBottomPanel();
+	
 		getContentPane().add(bottomPanel, BorderLayout.SOUTH);
-		
-		JLabel gridSizeLabel = new JLabel("Grid Size:");
-		bottomPanel.add(gridSizeLabel, BorderLayout.WEST);
-		
-		JLabel currentgridSizeLabel = new JLabel(String.valueOf(currentGridSize));
-		bottomPanel.add(currentgridSizeLabel, BorderLayout.EAST);
-		
-		JSlider gridSizeSlider = new JSlider();
-		gridSizeSlider.setMinimum(5);
-		gridSizeSlider.setMaximum(100);
-		gridSizeSlider.setValue(currentGridSize);
-		gridSizeSlider.setMinorTickSpacing(1);
-		gridSizeSlider.setMajorTickSpacing(10);
-		gridSizeSlider.setPaintTicks(true);
-		
-		gridSizeSlider.addChangeListener(new ChangeListener() {
-			
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				currentGridSize = gridSizeSlider.getValue();
-				currentgridSizeLabel.setText(String.valueOf(currentGridSize));
-				Runner.this.repaint();
-			}
-			
-		});
-		
-		bottomPanel.add(gridSizeSlider, BorderLayout.CENTER);
 		
 		
 		this.setVisible(true);
