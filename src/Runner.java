@@ -28,6 +28,7 @@ public class Runner extends JFrame{
 	static Cell[][] cells;
 	JPanel centerPanel, bottomPanel;
 	static SimpleAbstractButton readyButton;
+	static int currentDelay = 1000;
 	
 	public Runner() {
 		
@@ -54,6 +55,11 @@ public class Runner extends JFrame{
 				getContentPane().remove(centerPanel);
 				centerPanel = new EditorCenterPanel();
 				getContentPane().add(centerPanel, BorderLayout.CENTER);
+				
+				getContentPane().remove(bottomPanel);
+				bottomPanel = new EditorBottomPanel();
+				getContentPane().add(bottomPanel, BorderLayout.SOUTH);
+				
 				revalidate();
 				repaint();
 			}
