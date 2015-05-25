@@ -27,7 +27,7 @@ public class CellSelector extends JPanel{
 				if (startOutline.contains(e.getPoint()))
 					Runner.currentCellTypeSelection = CellTypes.START;
 				if (stopOutline.contains(e.getPoint()))
-					Runner.currentCellTypeSelection = CellTypes.STOP;
+					Runner.currentCellTypeSelection = CellTypes.END;
 				if (barrierOutline.contains(e.getPoint()))
 					Runner.currentCellTypeSelection = CellTypes.BARRIER;
 				if (emptyOutline.contains(e.getPoint()))
@@ -63,7 +63,7 @@ public class CellSelector extends JPanel{
 		//Draw Rectangles
 		if (active) g.setColor(CellTypes.START.color);
 		g.fill(start);
-		if (active) g.setColor(CellTypes.STOP.color);
+		if (active) g.setColor(CellTypes.END.color);
 		g.fill(stop);
 		if (active) g.setColor(CellTypes.BARRIER.color);
 		g.fill(barrier);
@@ -87,7 +87,7 @@ public class CellSelector extends JPanel{
 		//Draw Borders
 		if (active) g.setColor(Runner.currentCellTypeSelection == CellTypes.START? Color.black: Color.LIGHT_GRAY);
 		g.draw(startOutline);
-		if (active) g.setColor(Runner.currentCellTypeSelection == CellTypes.STOP? Color.black: Color.LIGHT_GRAY);
+		if (active) g.setColor(Runner.currentCellTypeSelection == CellTypes.END? Color.black: Color.LIGHT_GRAY);
 		g.draw(stopOutline);
 		if (active) g.setColor(Runner.currentCellTypeSelection == CellTypes.BARRIER? Color.black: Color.LIGHT_GRAY);
 		g.draw(barrierOutline);

@@ -53,7 +53,7 @@ public class Runner extends JFrame{
 				
 				for (int r=0; r < rows; r++)
 					for (int c=0; c < cols; c++)
-						cells[r][c] = new Cell(c*currentGridSize,r*currentGridSize,currentGridSize);
+						cells[r][c] = new Cell(c*currentGridSize, r*currentGridSize, r, c, currentGridSize);
 				
 				getContentPane().remove(centerPanel);
 				centerPanel = new EditorCenterPanel();
