@@ -12,6 +12,8 @@ public class Cell {
 	private int col;
 	double gCost = Double.MAX_VALUE, hCost = Double.MAX_VALUE, fCost = Double.MAX_VALUE;
 	Cell parentCell;
+	CellStatus status = CellStatus.NONE;
+	
 
 	public Cell(int x, int row, int col, int y) {
 		this(x,y, row, col, 50);
@@ -27,9 +29,25 @@ public class Cell {
 	
 	public void draw(Graphics2D g){
 		g.setColor(type.color);
+		if (status == CellStatus.OPEN)
+			g.setColor(Color.cyan);
+		if (status == CellStatus.CLOSED)
+			g.setColor(Color.orange);
+		if (status == CellStatus.FINAL)
+			g.setColor(Color.magenta);
 		g.fillRect(x, y, size, size);
 		g.setColor(Color.black);
 		g.drawRect(x, y, size, size);
+		
+		if (gCost < Double.MAX_VALUE)
+			g.drawString(String.format("%.1f", gCost), x+2, y+12);
+		
+		if (hCost < Double.MAX_VALUE)
+			g.drawString(String.format("%.1f", hCost), x+size-20, y+12);
+		
+		if (fCost < Double.MAX_VALUE)
+			g.drawString(String.format("%.1f", fCost), x+size/2-10, y+size/2);
+		
 	}
 	
 	public CellTypes getType() {
@@ -63,6 +81,10 @@ public class Cell {
 	@Override
 	public String toString() {
 		return "Cell: [x: " + x + " y: " + y + " row: " + row + " col: " + col + " type: " + type + " gCost: " + gCost + " hCost: " + hCost + " fCost: " + fCost + "]";
+	}
+
+	public void setStatus(CellStatus status) {
+		this.status = status;
 	}
 
 }
