@@ -29,6 +29,7 @@ public class Runner extends JFrame{
 	JPanel centerPanel, bottomPanel;
 	static SimpleAbstractButton readyButton;
 	static int currentDelay = 1000;
+	static CellTypes currentCellTypeSelection = CellTypes.BARRIER;
 	
 	public Runner() {
 		

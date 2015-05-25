@@ -18,13 +18,7 @@ public class EditorCenterPanel extends JPanel{
 			@Override
 			public void mousePressed(MouseEvent e) {
 				super.mousePressed(e);
-				
-				for (Cell[] row : Runner.cells)
-					for (Cell cell : row)
-						if (cell != lastClicked && cell.click(e))
-							lastClicked = cell;
-				repaint();
-				
+				press(e);
 			}
 			
 		});
@@ -35,16 +29,25 @@ public class EditorCenterPanel extends JPanel{
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				super.mouseDragged(e);
-				
-				for (Cell[] row : Runner.cells)
-					for (Cell cell : row)
-						if (cell != lastClicked && cell.click(e))
-							lastClicked = cell;
-				repaint();
-				
+				press(e);
 			}
 			
 		});
+		
+	}
+	
+	private void press(MouseEvent e){
+		
+		for (Cell[] row : Runner.cells)
+			for (Cell cell : row)
+				if (cell.contains(e))
+					cell.setType(Runner.currentCellTypeSelection);
+		
+//		for (Cell[] row : Runner.cells)
+//			for (Cell cell : row)
+//				if (cell != lastClicked && cell.contains(e))
+//					lastClicked = cell;
+		repaint();
 		
 	}
 	
