@@ -1,5 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -7,10 +9,15 @@ import javax.swing.JSlider;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.JButton;
 
 
 @SuppressWarnings("serial")
-public class EditorBottomPanel extends JPanel {
+abstract public class EditorBottomPanel extends JPanel {
+	
+	JButton startButton;
+	public abstract void onStart();
+	public abstract void onStop();
 
 	public EditorBottomPanel() {
 		
@@ -20,9 +27,31 @@ public class EditorBottomPanel extends JPanel {
 		JLabel delayLabel = new JLabel("Delay:");
 		add(delayLabel, BorderLayout.WEST);
 		
+		JPanel panel = new JPanel();
+		add(panel, BorderLayout.EAST);
+		panel.setLayout(new BorderLayout(0, 0));
+		
 		JLabel currentDelayLabel = new JLabel(Runner.currentDelay > 1000 ? Runner.currentDelay/1000.0 + "s" : Runner.currentDelay + "ms");
+		panel.add(currentDelayLabel, BorderLayout.WEST);
 		currentDelayLabel.setPreferredSize(new Dimension(50,0));
-		add(currentDelayLabel, BorderLayout.EAST);
+		
+		startButton = new JButton("Start");
+		
+		startButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (startButton.getText().equals("Start"))
+					onStart();
+				else if (startButton.getText().equals("Stop"))
+					onStop();
+				else
+					System.err.println("Could not find: " + startButton.getText());
+			}
+			
+		});
+		
+		panel.add(startButton, BorderLayout.EAST);
 		
 		JSlider delaySlider = new JSlider();
 		delaySlider.setMinimum(0);

@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -9,6 +10,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -22,7 +24,7 @@ import javax.swing.event.ChangeListener;
 @SuppressWarnings({ "serial", "unused" })
 public class Runner extends JFrame{
 
-	//Screen currentScreen = Screen.MENU;
+	static Screen currentScreen = Screen.MENU;
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	static int currentGridSize = 30;
 	static Cell[][] cells;
@@ -58,9 +60,32 @@ public class Runner extends JFrame{
 				getContentPane().add(centerPanel, BorderLayout.CENTER);
 				
 				getContentPane().remove(bottomPanel);
-				bottomPanel = new EditorBottomPanel();
+				bottomPanel = new EditorBottomPanel(){
+
+					@Override
+					public void onStart() {
+						
+						currentScreen = Screen.RUN;
+						
+						getContentPane().remove(centerPanel);
+						centerPanel = new PathFindingCenterPanel();
+						getContentPane().add(centerPanel, BorderLayout.CENTER);
+						
+						revalidate();
+						Runner.this.repaint();
+						startButton.setText("Stop");
+					}
+
+					@Override
+					public void onStop() {
+						
+					}
+					
+				};
+				
 				getContentPane().add(bottomPanel, BorderLayout.SOUTH);
 				
+				currentScreen = Screen.EDITOR;
 				setResizable(false);
 				
 				revalidate();
@@ -80,7 +105,6 @@ public class Runner extends JFrame{
 		JPanel sidePanel = new CellSelector();
 		
 		getContentPane().add(sidePanel, BorderLayout.EAST);
-		
 		
 		
 		this.setVisible(true);

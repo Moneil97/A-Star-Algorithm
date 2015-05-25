@@ -43,10 +43,6 @@ public class EditorCenterPanel extends JPanel{
 				if (cell.contains(e))
 					cell.setType(Runner.currentCellTypeSelection);
 		
-//		for (Cell[] row : Runner.cells)
-//			for (Cell cell : row)
-//				if (cell != lastClicked && cell.contains(e))
-//					lastClicked = cell;
 		repaint();
 		
 	}

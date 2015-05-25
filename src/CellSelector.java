@@ -57,18 +57,21 @@ public class CellSelector extends JPanel{
 		Graphics2D g = (Graphics2D) g1;
 		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		
+		boolean active = Runner.currentScreen == Screen.EDITOR;
+		if (!active) g.setColor(Color.LIGHT_GRAY);
+		
 		//Draw Rectangles
-		g.setColor(CellTypes.START.color);
+		if (active) g.setColor(CellTypes.START.color);
 		g.fill(start);
-		g.setColor(CellTypes.STOP.color);
+		if (active) g.setColor(CellTypes.STOP.color);
 		g.fill(stop);
-		g.setColor(CellTypes.BARRIER.color);
+		if (active) g.setColor(CellTypes.BARRIER.color);
 		g.fill(barrier);
-		g.setColor(CellTypes.EMPTY.color);
+		if (active) g.setColor(CellTypes.EMPTY.color);
 		g.fill(empty);
 		
 		//Draw Outlines
-		g.setColor(Color.black);
+		if (active) g.setColor(Color.black);
 		g.draw(start);
 		g.draw(stop);
 		g.draw(barrier);
@@ -82,13 +85,13 @@ public class CellSelector extends JPanel{
 		g.drawString("Empty", 50, 127);
 		
 		//Draw Borders
-		g.setColor(Runner.currentCellTypeSelection == CellTypes.START? Color.black: Color.LIGHT_GRAY);
+		if (active) g.setColor(Runner.currentCellTypeSelection == CellTypes.START? Color.black: Color.LIGHT_GRAY);
 		g.draw(startOutline);
-		g.setColor(Runner.currentCellTypeSelection == CellTypes.STOP? Color.black: Color.LIGHT_GRAY);
+		if (active) g.setColor(Runner.currentCellTypeSelection == CellTypes.STOP? Color.black: Color.LIGHT_GRAY);
 		g.draw(stopOutline);
-		g.setColor(Runner.currentCellTypeSelection == CellTypes.BARRIER? Color.black: Color.LIGHT_GRAY);
+		if (active) g.setColor(Runner.currentCellTypeSelection == CellTypes.BARRIER? Color.black: Color.LIGHT_GRAY);
 		g.draw(barrierOutline);
-		g.setColor(Runner.currentCellTypeSelection == CellTypes.EMPTY? Color.black: Color.LIGHT_GRAY);
+		if (active) g.setColor(Runner.currentCellTypeSelection == CellTypes.EMPTY? Color.black: Color.LIGHT_GRAY);
 		g.draw(emptyOutline);
 		
 	}
