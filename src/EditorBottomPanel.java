@@ -55,7 +55,7 @@ abstract public class EditorBottomPanel extends JPanel {
 		
 		JSlider delaySlider = new JSlider();
 		delaySlider.setMinimum(0);
-		delaySlider.setMaximum(10000);
+		delaySlider.setMaximum(1000);
 		delaySlider.setValue(Runner.currentDelay);
 		delaySlider.setMinorTickSpacing(1);
 		delaySlider.setMajorTickSpacing(10);

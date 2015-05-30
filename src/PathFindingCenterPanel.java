@@ -94,10 +94,12 @@ public class PathFindingCenterPanel extends JPanel{
 					
 					repaint();
 					
-					try {
-						Thread.sleep(Runner.currentDelay);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+					if (Runner.currentDelay != 0){
+						try {
+							Thread.sleep(Runner.currentDelay);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 					}
 				
 				}

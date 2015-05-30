@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -30,7 +31,7 @@ public class Runner extends JFrame{
 	static Cell[][] cells;
 	JPanel centerPanel, bottomPanel;
 	static SimpleAbstractButton readyButton;
-	static int currentDelay = 1000;
+	static int currentDelay = 200;
 	static CellTypes currentCellTypeSelection = CellTypes.BARRIER;
 	
 	public Runner() {
@@ -137,6 +138,13 @@ public class Runner extends JFrame{
 	}
 
 	public static void main(String[] args) {
+		
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+			System.err.println("Could not set look and feel!");
+		}
+		
 		new Runner();
 	}
 
