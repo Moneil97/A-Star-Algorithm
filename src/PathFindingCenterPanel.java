@@ -2,6 +2,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
 
 import javax.swing.JPanel;
 
@@ -14,7 +15,8 @@ public class PathFindingCenterPanel extends JPanel{
 		
 		new Thread(new Runnable() {
 			
-			List<Cell> open = new ArrayList<Cell>();
+			PriorityQueue<Cell> open = new PriorityQueue<Cell>();
+			//List<Cell> open = new ArrayList<Cell>();
 			List<Cell> closed = new ArrayList<Cell>();
 			
 			@Override
@@ -26,24 +28,23 @@ public class PathFindingCenterPanel extends JPanel{
 				start.hCost = getCostBetween(start, endCell);
 				open.add(start);
 				
-				say(getAdjacent(start));
-				
-				if (open.get(0) == null){
+				if (open.size() <= 0){
 					System.err.println("no start");
 					return;
 				}
+				
 				say(open);
 
 				while (true){
 				
-					Cell current = getLowestOpenFCost();
-					open.remove(current);
+					Cell current = open.poll();//getLowestOpenFCost();
+					//open.remove(current);
 					closed.add(current);
 					current.setStatus(CellStatus.CLOSED);
 					
 					if (current.getType() == CellTypes.END){
-						say("we done");
-						say(closed);
+						//say("we done");
+						//say(closed);
 						repaint();
 						
 						Cell cell = endCell.parentCell;
@@ -52,7 +53,7 @@ public class PathFindingCenterPanel extends JPanel{
 						do{
 							cell = cell.parentCell;
 							cell.setStatus(CellStatus.FINAL);
-							say(cell);
+							//say(cell);
 							repaint();
 						}while(cell.parentCell != null);
 						
@@ -83,20 +84,20 @@ public class PathFindingCenterPanel extends JPanel{
 									}
 								}
 								
+								open.remove(neighbor);
 								neighbor.fCost = neighbor.gCost + neighbor.hCost;
+								open.add(neighbor);
 								
 							}
-							
-							
 						}
-						
-						repaint();
-						
-						try {
-							Thread.sleep(Runner.currentDelay);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+					}
+					
+					repaint();
+					
+					try {
+						Thread.sleep(Runner.currentDelay);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
 				
 				}
@@ -151,35 +152,11 @@ public class PathFindingCenterPanel extends JPanel{
 						if (r[i] >= 0 && r[i] < Runner.cells.length && c[i] >= 0 && c[i] < Runner.cells[r[i]].length)
 							cells.add(Runner.cells[r[i]][c[i]]);
 				
-				if (cells.size() > 4)
-					System.err.println(" > 4");
+//				if (cells.size() > 4)
+//					System.err.println(" > 4");
 				
 				return cells;
 			}
-
-//			private void updateCostsAround(Cell currentCell) {
-//				
-//				for (int r=Math.max(0, currentCell.getRow()-1); r <= Math.min(Runner.cells.length, currentCell.getRow()+1); r++)
-//					for (int c=Math.max(0, currentCell.getCol()-1); c <= Math.min(Runner.cells[r].length ,currentCell.getCol()+1); c++){
-//						
-//						if (!closed.contains(Runner.cells[r][c])){
-//						
-//							//say("r: " + r + " c: " + c);
-//							//TODO Need to fix this later, needs to check distance from parent cell and add it to parent's gCost //Done?
-//							double newGCost = currentCell.gCost + getCostBetween(currentCell, Runner.cells[r][c]);
-//							if (Runner.cells[r][c].gCost > newGCost){
-//								Runner.cells[r][c].gCost = newGCost;
-//								Runner.cells[r][c].parentCell = currentCell;
-//							}
-//							
-//							Runner.cells[r][c].hCost = getCostBetween(Runner.cells[r][c], endCell);
-//							
-//							Runner.cells[r][c].fCost = Runner.cells[r][c].hCost + Runner.cells[r][c].gCost;
-//						}
-//					}
-//						
-//				
-//			}
 			
 			private double getCostBetween(Cell a, Cell b){
 				int height = Math.abs(a.getRow() - b.getRow());
@@ -191,16 +168,19 @@ public class PathFindingCenterPanel extends JPanel{
 				return distance;
 			}
 			
-			private Cell getLowestOpenFCost(){
-				
-				Cell lowest = open.get(0);
-				
-				for (Cell cell: open)
-					if (lowest.fCost > cell.fCost)
-						lowest = cell;
-				
-				return lowest;
-			}
+			
+//			private Cell getLowestOpenFCost(){
+//				
+//				return open.poll();
+//				
+////				Cell lowest = open.get(0);
+////				
+////				for (Cell cell: open)
+////					if (lowest.fCost > cell.fCost)
+////						lowest = cell;
+////				
+////				return lowest;
+//			}
 			
 			private Cell getStartCell(){
 				for (Cell[] row : Runner.cells)

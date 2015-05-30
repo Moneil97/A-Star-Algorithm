@@ -3,7 +3,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
-public class Cell {
+public class Cell implements Comparable<Cell>{
 
 	int x, y, size;
 	boolean partOfPath = false;
@@ -15,9 +15,9 @@ public class Cell {
 	CellStatus status = CellStatus.NONE;
 	
 
-	public Cell(int x, int row, int col, int y) {
-		this(x,y, row, col, 50);
-	}
+//	public Cell(int x, int row, int col, int y) {
+//		this(x,y, row, col, 50);
+//	}
 	
 	public Cell(int x, int y, int row, int col, int size) {
 		this.x = x;
@@ -39,14 +39,14 @@ public class Cell {
 		g.setColor(Color.black);
 		g.drawRect(x, y, size, size);
 		
-		if (gCost < Double.MAX_VALUE)
-			g.drawString(String.format("%.1f", gCost), x+2, y+12);
-		
-		if (hCost < Double.MAX_VALUE)
-			g.drawString(String.format("%.1f", hCost), x+size-20, y+12);
-		
-		if (fCost < Double.MAX_VALUE)
-			g.drawString(String.format("%.1f", fCost), x+size/2-10, y+size/2);
+//		if (gCost < Double.MAX_VALUE)
+//			g.drawString(String.format("%.1f", gCost), x+2, y+12);
+//		
+//		if (hCost < Double.MAX_VALUE)
+//			g.drawString(String.format("%.1f", hCost), x+size-20, y+12);
+//		
+//		if (fCost < Double.MAX_VALUE)
+//			g.drawString(String.format("%.1f", fCost), x+size/2-10, y+size/2);
 		
 	}
 	
@@ -85,6 +85,16 @@ public class Cell {
 
 	public void setStatus(CellStatus status) {
 		this.status = status;
+	}
+
+	@Override
+	public int compareTo(Cell other) {
+		if (other.fCost > this.fCost)
+			return -1;
+		if (other.fCost < this.fCost)
+			return 1;
+		
+		return 0;
 	}
 
 }
