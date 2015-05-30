@@ -117,7 +117,7 @@ public class PathFindingCenterPanel extends JPanel{
 						currentBarriers.add(cell);
 				}
 				
-				if (currentBarriers.size() < 2)
+				if (currentBarriers.size() < /*2*/1)
 					return false;
 				
 				List<Cell> neighborBarriers = new ArrayList<Cell>();
@@ -127,17 +127,21 @@ public class PathFindingCenterPanel extends JPanel{
 						neighborBarriers.add(cell);
 				}
 				
+				if (neighborBarriers.size() < /*2*/1)
+					return false;
+				
 				int similar = 0;
 				
 				for (Cell a : currentBarriers)
 					for (Cell b : neighborBarriers)
 						if (a == b){
 							similar++;
+							if (similar >= /*2*/1)
+								return true;
 							break;
 						}
 				
-				return similar >=2;
-				
+				return false;//similar >=2;
 				
 			}
 			
@@ -168,19 +172,6 @@ public class PathFindingCenterPanel extends JPanel{
 				return distance;
 			}
 			
-			
-//			private Cell getLowestOpenFCost(){
-//				
-//				return open.poll();
-//				
-////				Cell lowest = open.get(0);
-////				
-////				for (Cell cell: open)
-////					if (lowest.fCost > cell.fCost)
-////						lowest = cell;
-////				
-////				return lowest;
-//			}
 			
 			private Cell getStartCell(){
 				for (Cell[] row : Runner.cells)
