@@ -28,12 +28,13 @@ public class Cell implements Comparable<Cell>{
 	}
 	
 	public void draw(Graphics2D g){
-		g.setColor(type.color);
-		if (status == CellStatus.OPEN)
+		if (status == CellStatus.NONE)
+			g.setColor(type.color);
+		else if (status == CellStatus.OPEN)
 			g.setColor(Color.cyan);
-		if (status == CellStatus.CLOSED)
+		else if (status == CellStatus.CLOSED)
 			g.setColor(Color.orange);
-		if (status == CellStatus.FINAL)
+		else if (status == CellStatus.FINAL)
 			g.setColor(Color.magenta);
 		g.fillRect(x, y, size, size);
 		g.setColor(Color.black);
@@ -85,6 +86,11 @@ public class Cell implements Comparable<Cell>{
 
 	public void setStatus(CellStatus status) {
 		this.status = status;
+	}
+	
+	public void reset(){
+		status = CellStatus.NONE;
+		gCost = hCost = fCost = Double.MAX_VALUE;
 	}
 
 	@Override

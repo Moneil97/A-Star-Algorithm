@@ -4,104 +4,127 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
 public class PathFindingCenterPanel extends JPanel{
 
 	Cell endCell;
+	private Thread thread;
 	
 	public PathFindingCenterPanel() {
 		
-		new Thread(new Runnable() {
+		thread = new Thread(new Runnable() {
 			
 			PriorityQueue<Cell> open = new PriorityQueue<Cell>();
-			//List<Cell> open = new ArrayList<Cell>();
 			List<Cell> closed = new ArrayList<Cell>();
 			
 			@Override
 			public void run() {
-
-				endCell = getEndCell();
-				Cell start = getStartCell();
-				start.gCost = 0;
-				start.hCost = getCostBetween(start, endCell);
-				open.add(start);
 				
-				if (open.size() <= 0){
-					System.err.println("no start");
-					return;
-				}
-				
-				say(open);
-
-				while (true){
-				
-					Cell current = open.poll();//getLowestOpenFCost();
-					//open.remove(current);
-					closed.add(current);
-					current.setStatus(CellStatus.CLOSED);
+				try{
 					
-					if (current.getType() == CellTypes.END){
-						//say("we done");
-						//say(closed);
-						repaint();
-						
-						Cell cell = endCell.parentCell;
-						cell.setStatus(CellStatus.FINAL);
-						
-						do{
-							cell = cell.parentCell;
-							cell.setStatus(CellStatus.FINAL);
-							//say(cell);
-							repaint();
-						}while(cell.parentCell != null);
-						
-						
+					long startTime = System.nanoTime();
+
+					endCell = getEndCell();
+					
+					if (endCell == null){
+						JOptionPane.showMessageDialog(PathFindingCenterPanel.this, "No Available End Point");
 						return;
 					}
 					
+					Cell start = getStartCell();
 					
-					for (int r=Math.max(0, current.getRow()-1); r <= Math.min(Runner.cells.length-1, current.getRow()+1); r++){
-						for (int c=Math.max(0, current.getCol()-1); c <= Math.min(Runner.cells[r].length-1 ,current.getCol()+1); c++){
+					if (start == null){
+						JOptionPane.showMessageDialog(PathFindingCenterPanel.this, "No Available Start Point");
+						return;
+					}
+					
+					start.gCost = 0;
+					start.hCost = getCostBetween(start, endCell);
+					open.add(start);
+	
+					while (true){
+					
+						Cell current = open.poll();
+						
+						if (current == null){
+							JOptionPane.showMessageDialog(PathFindingCenterPanel.this, "No Path Found");
+							return;
+						}
+						
+						closed.add(current);
+						current.setStatus(CellStatus.CLOSED);
+						
+						if (current.getType() == CellTypes.END){
+	
+							repaint();
 							
-							Cell neighbor = Runner.cells[r][c];
+							Cell cell = endCell;
+							cell.setStatus(CellStatus.FINAL);
 							
-							if (checkIfCorner(current, neighbor))
-								continue;
-							
-							if ((neighbor.getType() == CellTypes.EMPTY || neighbor.getType() == CellTypes.END) && !closed.contains(neighbor)){
+							do{
+								cell = cell.parentCell;
+								cell.setStatus(CellStatus.FINAL);
 								
-								neighbor.hCost = getCostBetween(neighbor, endCell);
 								
-								double newGCost = current.gCost + getCostBetween(current, neighbor);
-								if (neighbor.gCost > newGCost){
-									neighbor.gCost = newGCost;
-									neighbor.parentCell = current;
-									if (!open.contains(neighbor)){
-										open.add(neighbor);
-										neighbor.setStatus(CellStatus.OPEN);
+								//say(cell);
+								//repaint();
+							}while(cell.parentCell != null);
+							
+							say("It took: " + ((System.nanoTime() - startTime)/1000000000.0) + " sec");
+							
+							repaint();
+							
+							return;
+						}
+						
+						
+						for (int r=Math.max(0, current.getRow()-1); r <= Math.min(Runner.cells.length-1, current.getRow()+1); r++){
+							for (int c=Math.max(0, current.getCol()-1); c <= Math.min(Runner.cells[r].length-1 ,current.getCol()+1); c++){
+								
+								Cell neighbor = Runner.cells[r][c];
+								
+								if (checkIfCorner(current, neighbor))
+									continue;
+								
+								if ((neighbor.getType() == CellTypes.EMPTY || neighbor.getType() == CellTypes.END) && !closed.contains(neighbor)){
+									
+									neighbor.hCost = getCostBetween(neighbor, endCell);
+									
+									double newGCost = current.gCost + getCostBetween(current, neighbor);
+									if (neighbor.gCost > newGCost){
+										neighbor.gCost = newGCost;
+										neighbor.parentCell = current;
+										if (!open.contains(neighbor)){
+											open.add(neighbor);
+											neighbor.setStatus(CellStatus.OPEN);
+										}
 									}
+									
+									open.remove(neighbor);
+									neighbor.fCost = neighbor.gCost + neighbor.hCost;
+									open.add(neighbor);
+									
 								}
-								
-								open.remove(neighbor);
-								neighbor.fCost = neighbor.gCost + neighbor.hCost;
-								open.add(neighbor);
-								
 							}
 						}
-					}
-					
-					repaint();
-					
-					if (Runner.currentDelay != 0){
-						try {
+						
+						repaint();
+						
+						if (Runner.currentDelay != 0){
 							Thread.sleep(Runner.currentDelay);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
 						}
+						else if (thread.isInterrupted())
+							return;
+						
 					}
-				
+					
+				}
+				catch (InterruptedException e) {
+					e.printStackTrace();
+					return;
 				}
 				
 			}
@@ -158,19 +181,13 @@ public class PathFindingCenterPanel extends JPanel{
 						if (r[i] >= 0 && r[i] < Runner.cells.length && c[i] >= 0 && c[i] < Runner.cells[r[i]].length)
 							cells.add(Runner.cells[r[i]][c[i]]);
 				
-//				if (cells.size() > 4)
-//					System.err.println(" > 4");
-				
 				return cells;
 			}
 			
 			private double getCostBetween(Cell a, Cell b){
 				int height = Math.abs(a.getRow() - b.getRow());
-				//say("height: " + height);
 				int length = Math.abs(a.getCol() - b.getCol());
-				//say("length: " + length);
 				double distance = Math.sqrt(length*length + height*height);
-				//say("distance: " + distance);
 				return distance;
 			}
 			
@@ -191,9 +208,20 @@ public class PathFindingCenterPanel extends JPanel{
 				return null;
 			}
 			
-			
-		}).start();
+		});
 		
+		thread.start();
+		
+	}
+	
+	public void stop(){
+
+		thread.interrupt();
+
+		for (Cell[] row : Runner.cells)
+			for (Cell cell : row)
+				cell.reset();
+
 	}
 	
 //	private void print2D(Object[][] array){

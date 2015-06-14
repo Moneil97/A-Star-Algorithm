@@ -32,7 +32,7 @@ public class Runner extends JFrame{
 	JPanel centerPanel, bottomPanel;
 	static SimpleAbstractButton readyButton;
 	static int currentDelay = 200;
-	static CellTypes currentCellTypeSelection = CellTypes.BARRIER;
+	static CellTypes currentCellTypeSelection = CellTypes.START;
 	
 	public Runner() {
 		
@@ -79,6 +79,18 @@ public class Runner extends JFrame{
 
 					@Override
 					public void onStop() {
+						
+						currentScreen = Screen.EDITOR;
+						
+						((PathFindingCenterPanel) centerPanel).stop();
+						
+						getContentPane().remove(centerPanel);
+						centerPanel = new EditorCenterPanel();
+						getContentPane().add(centerPanel, BorderLayout.CENTER);
+						
+						revalidate();
+						Runner.this.repaint();
+						startButton.setText("Start");
 						
 					}
 					
